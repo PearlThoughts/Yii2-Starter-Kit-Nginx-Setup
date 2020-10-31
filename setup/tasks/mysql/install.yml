@@ -1,7 +1,4 @@
 # Download mysql debian package
-- name: Add mysql apt-config debian
-  apt: deb=https://dev.mysql.com/get/mysql-apt-config_0.8.15-1_all.deb update-cache=yes
-  become: yes
 - name: Install MySQL
   apt:
     name: mysql-server
@@ -9,8 +6,16 @@
     state: present
   notify:
       - Start MySQL
+
 - name: install pip3
   apt: name=python3-pip state=present 
+
+- name: Install pip
+  apt:
+    name: python-pip
+    update_cache: yes
+    state: present
+
 - name: Make sure pymysql is present
   become: true # needed if the other tasks are not played as root
   pip:

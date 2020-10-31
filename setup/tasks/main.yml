@@ -1,9 +1,12 @@
----
+# ---
 # - name: Checkout zsh
 #   include: zsh.yml
 
 - name: Prepares project directory
   include: prepare_dir.yml
+
+- name: reset ssh connection
+  meta: reset_connection
 
 - name: Checkout repo
   include: repo.yml
@@ -23,13 +26,59 @@
 - name: configures MySQL
   include: mysql/main.yml
 
-# composer is broken, hence disabling it
-# - name: configures composer and install packages
-#   include: composer.yml
+- name: Delete db {{ project_name }}
+  mysql_db:
+    name: "{{ project_name }}"
+    state: absent
 
-- name: Configures permission for frontend/web/assets
-  file:
-    path: "{{ project_root_dir }}/frontend/web/assets"
-    mode: u+rw,g+wx,o+r
-    owner: www-data
-    group: deploy
+- name: Create a new database with name {{ project_name }}
+  mysql_db:
+    name: "{{ project_name }}"
+    state: present
+
+# composer is broken, hence disabling it
+- name: configures composer and install packages
+  include: composer.yml
+
+
+- name: add nodejs apt key
+  apt_key:
+    url: https://deb.nodesource.com/gpgkey/nodesource.gpg.key
+    state: present
+- name: add nodejs repository
+  apt_repository:
+    repo: deb https://deb.nodesource.com/node_12.x bionic main
+    state: present
+    update_cache: yes
+
+- name: install nodejs
+  apt:
+    name: nodejs
+    state: present
+
+- name: Set up the project
+  become_user: "{{ host_user }}"
+  become: yes
+  shell: php {{ project_root_dir }}/console/yii migrate/up --interactive=0
+
+- name: Install Node packages
+  shell: npm install
+  args:
+    chdir: "{{ project_root_dir }}"
+
+- name: Npm run build
+  shell: npm run build
+  args:
+    chdir: "{{ project_root_dir }}"
+  
+- name: Set up the project
+  shell: "{{ project_root_dir }}/console/yii app/demo-data 30"
+
+# - name: Configures permission for frontend/web/assets
+#   become_user: "{{ host_user }}"
+#   become: yes
+#   file:
+#     path: "{{ project_root_dir }}/frontend/web/assets"
+#     mode: u+rw,g+wx,o+r
+#     owner: www-data
+#     group: deploy

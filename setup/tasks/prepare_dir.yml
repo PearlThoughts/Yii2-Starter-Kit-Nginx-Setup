@@ -3,7 +3,7 @@
   group:
     name: deploy
     state: present
-- name: Add the user '{{ host_user }}' with a specific uid and a primary group of 'admin'
+- name: Add the user '{{ host_user }}' with a specific uid and a primary group of 'deploy'
   user:
     name: "{{ host_user }}"
     group: deploy

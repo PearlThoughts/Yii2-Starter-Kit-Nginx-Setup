@@ -11,11 +11,11 @@
 #     creates: /usr/local/bin/composer
 
 # This is not required for newer Yii projects but retained for existing ones
-- composer:
-    command: require
-    global_command: yes
-    arguments: fxp/composer-asset-plugin:dev-master
-  become_user: "{{ host_user }}"
+# - composer:
+#     command: require
+#     global_command: yes
+#     arguments: fxp/composer-asset-plugin:dev-master
+#   become_user: "{{ host_user }}"
 
 - name: Composer install
   command: chdir="{{ project_root_dir }}" composer install
