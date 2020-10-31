@@ -13,7 +13,4 @@
     project_name: Practice
 
   roles:
-      # - role: stephdewit.nvm
-      #   nvm_version: 'latest'
-      #   nvm_node_version: 'latest'
       - name: setup

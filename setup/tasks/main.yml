@@ -1,4 +1,4 @@
-# ---
+---
 # - name: Checkout zsh
 #   include: zsh.yml
 
@@ -61,6 +61,11 @@
   become: yes
   shell: php {{ project_root_dir }}/console/yii migrate/up --interactive=0
 
+- name: Clean-up nodemodules directory
+  file:
+    path: "{{ project_root_dir }}/node_modules"
+    state: absent
+
 - name: Install Node packages
   shell: npm install
   args:
@@ -71,14 +76,22 @@
   args:
     chdir: "{{ project_root_dir }}"
   
-- name: Set up the project
-  shell: "{{ project_root_dir }}/console/yii app/demo-data 30"
+# Faker throws exception, hence commenting it out
+# - name: Set up the project
+#   shell: "{{ project_root_dir }}/console/yii app/demo-data 30"
 
-# - name: Configures permission for frontend/web/assets
-#   become_user: "{{ host_user }}"
-#   become: yes
-#   file:
-#     path: "{{ project_root_dir }}/frontend/web/assets"
-#     mode: u+rw,g+wx,o+r
-#     owner: www-data
-#     group: deploy
+# throws error in MacOS/Vagrant
+- name: Configures permission for frontend/web/assets
+  file:
+    path: "{{ project_root_dir }}/frontend/web/assets"
+    mode: u+rw,g+wx,o+r
+    owner: www-data
+    group: deploy
+
+# throws error in MacOS/Vagrant
+- name: Configures permission for frontend/web/assets
+  file:
+    path: "{{ project_root_dir }}/frontend/runtime"
+    mode: u+rw,g+wx,o+r
+    owner: www-data
+    group: deploy
