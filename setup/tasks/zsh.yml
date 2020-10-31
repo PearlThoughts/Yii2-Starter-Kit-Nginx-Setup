@@ -1,0 +1,29 @@
+# https://github.com/jamescarr/ansible-mac-demo
+---
+- name: Install ZSH
+  homebrew:
+    name: zsh
+    state: latest
+
+- name: Check for Oh My ZSH Installation
+  stat:
+    path: ~/.oh-my-zsh
+  register: omz_installed
+
+- name: Install Oh My ZSH...
+  git:
+    repo: 'git://github.com/robbyrussell/oh-my-zsh.git'
+    dest: ~/.oh-my-zsh
+  when: not omz_installed.stat.exists
+
+- name: Backup existing zshrc if it exists
+  copy:
+    src: ~/.zshrc
+    dest: .zshrc-backup.{{ ansible_date_time.epoch }}
+  when: not omz_installed.stat.exists
+
+- name: Render zshrc
+  template:
+    src: zshrc.j2
+    dest: ~/.zshrc
+  when: not omz_installed.stat.exists

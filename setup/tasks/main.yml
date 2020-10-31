@@ -1,0 +1,35 @@
+---
+# - name: Checkout zsh
+#   include: zsh.yml
+
+- name: Prepares project directory
+  include: prepare_dir.yml
+
+- name: Checkout repo
+  include: repo.yml
+
+- name: Configures env
+  include: env.yml
+
+- name: configures apt
+  include: apt-update.yml
+
+- name: configures PHP
+  include: php/main.yml
+
+- name: configures Nginx
+  include: nginx-conf.yml
+
+- name: configures MySQL
+  include: mysql/main.yml
+
+# composer is broken, hence disabling it
+# - name: configures composer and install packages
+#   include: composer.yml
+
+- name: Configures permission for frontend/web/assets
+  file:
+    path: "{{ project_root_dir }}/frontend/web/assets"
+    mode: u+rw,g+wx,o+r
+    owner: www-data
+    group: deploy

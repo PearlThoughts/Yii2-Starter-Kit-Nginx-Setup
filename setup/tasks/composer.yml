@@ -1,0 +1,22 @@
+
+# Composer 2.x is having compatibility issues with Yii2's Gii, hence installing composer 1.x
+
+- name: install composer 1.6
+  apt: name=composer=1.6.3-1 state=present 
+
+# May install Composer 2.x
+# - name: install composer
+#   shell: curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+#   args:
+#     creates: /usr/local/bin/composer
+
+# This is not required for newer Yii projects but retained for existing ones
+- composer:
+    command: require
+    global_command: yes
+    arguments: fxp/composer-asset-plugin:dev-master
+  become_user: "{{ host_user }}"
+
+- name: Composer install
+  command: chdir="{{ project_root_dir }}" composer install
+  become_user: "{{ host_user }}"

@@ -1,0 +1,16 @@
+- name: set PHP memory limit for web apps
+  ini_file:
+    path: /etc/php/7.2/apache2/php.ini
+    section: PHP
+    option: memory_limit
+    value: 512M
+- name: set PHP memory limit for console apps
+  ini_file:
+    path: /etc/php/7.2/cli/php.ini
+    section: PHP
+    option: memory_limit
+    value: 512M
+- name: enabled mod_rewrite
+  apache2_module: name=rewrite state=present
+  notify:
+    - restart apache2

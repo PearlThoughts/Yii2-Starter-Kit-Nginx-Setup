@@ -1,0 +1,24 @@
+---
+- name: Ensure group "deploy" exists
+  group:
+    name: deploy
+    state: present
+- name: Add the user '{{ host_user }}' with a specific uid and a primary group of 'admin'
+  user:
+    name: "{{ host_user }}"
+    group: deploy
+- name: Recursively change ownership of a directory
+  file:
+    path: "{{ project_root_dir }}"
+    state: directory
+    recurse: yes
+    owner: root
+    group: deploy
+- name: Change file ownership, group and permissions
+  file:
+    path: "{{ project_root_dir }}"
+    mode: '2775'
+- name: Execute the command in remote shell; stdout goes to the specified file on the remote.
+  shell: find {{ project_root_dir }} -type d -exec chmod 2775 {} +
+- name: Execute the command in remote shell; stdout goes to the specified file on the remote.
+  shell: find {{ project_root_dir }} -type f -exec chmod 0664 {} +

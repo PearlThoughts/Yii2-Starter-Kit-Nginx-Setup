@@ -1,0 +1,16 @@
+---
+# setup my macbook just the way I like it
+
+- hosts: all
+  become: true
+  vars:
+    project_root_dir: "/srv/Practice"
+    ssh_git_repo_url: "git@github.com:yii2-starter-kit/yii2-starter-kit.git"
+    ssh_key_path: ~/.ssh/id_rsa
+    mysql_root_password: password
+    host_user: vagrant
+    http_host: practice.local
+    project_name: Practice
+
+  roles:
+      - name: setup

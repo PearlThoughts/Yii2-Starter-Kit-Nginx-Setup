@@ -1,0 +1,7 @@
+# templates/ssh_config.j2
+
+{{ ansible_managed | comment }}
+
+Host github.com
+    IdentityFile /home/{{ host_user }}/.ssh/id_rsa
+    IdentitiesOnly yes

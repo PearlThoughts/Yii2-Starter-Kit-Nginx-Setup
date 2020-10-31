@@ -1,0 +1,6 @@
+---
+- name: Installs PHP
+  include: install.yml
+
+- name: Configures PHP
+  include: conf.yml

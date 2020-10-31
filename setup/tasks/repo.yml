@@ -1,0 +1,24 @@
+---
+- name: Clone repo
+  copy: >
+    src={{ ssh_key_path }}
+    dest=/home/{{ host_user }}/.ssh/id_rsa
+    owner={{ host_user }}
+    group={{ host_user }}
+    mode=0600
+- name: configure ssh to use ansible key for GitHub
+  template: >
+    src=templates/ssh_config.j2
+    dest=/home/{{ host_user }}/.ssh/config
+    owner={{ host_user }}
+    group={{ host_user }}
+    mode=0644
+- name: clone a private repository
+  git:
+    repo: "{{ ssh_git_repo_url }}"
+    dest: "{{ project_root_dir }}"
+    version: master
+    accept_hostkey: yes
+    key_file: /home/{{ host_user }}/.ssh/id_rsa
+    force: yes
+  become_user: "{{ host_user }}"
