@@ -9,16 +9,16 @@
     group: deploy
 - name: Recursively change ownership of a directory
   file:
-    path: "{{ project_root_dir }}"
+    path: "/srv"
     state: directory
     recurse: yes
     owner: root
     group: deploy
 - name: Change file ownership, group and permissions
   file:
-    path: "{{ project_root_dir }}"
+    path: "/srv"
     mode: '2775'
 - name: Execute the command in remote shell; stdout goes to the specified file on the remote.
-  shell: find {{ project_root_dir }} -type d -exec chmod 2775 {} +
+  shell: find /srv -type d -exec chmod 2775 {} +
 - name: Execute the command in remote shell; stdout goes to the specified file on the remote.
-  shell: find {{ project_root_dir }} -type f -exec chmod 0664 {} +
+  shell: find /srv -type f -exec chmod 0664 {} +

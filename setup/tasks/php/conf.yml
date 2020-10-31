@@ -10,7 +10,3 @@
     section: PHP
     option: memory_limit
     value: 512M
-- name: enabled mod_rewrite
-  apache2_module: name=rewrite state=present
-  notify:
-    - restart apache2

@@ -1,4 +1,4 @@
-- name: "Install Apache and PHP"
+- name: "Install Nginx and PHP"
   apt:
     pkg:
       - nginx

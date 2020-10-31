@@ -9,3 +9,9 @@
   service:
     name: nginx
     state: restarte
+
+- name: Start MySQL
+  service: name=mysql enabled=yes state=started
+
+- name: Restart MySQL
+  service: name=mysql enabled=yes state=restarted

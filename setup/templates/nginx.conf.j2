@@ -1,6 +1,6 @@
 server {
-        listen {{ http_port }};
-        root {{ project_root }};
+        listen 80;
+        root {{ project_root_dir }};
         index index.php index.html index.htm index.nginx-debian.html;
         server_name {{ http_host }};
 
